@@ -37,13 +37,13 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     self.Game_States = GameStates.GAMEOVER
                 elif event.key == pygame.K_LEFT:
-                    self.player.update_position(-1, 0)
+                    self.move_unit(self.player, [-1, 0])
                 elif event.key == pygame.K_RIGHT:
-                    self.player.update_position(1, 0)
+                    self.move_unit(self.player, [1, 0])
                 elif event.key == pygame.K_UP:
-                    self.player.update_position(0, -1)
+                    self.move_unit(self.player, [0, -1])
                 elif event.key == pygame.K_DOWN:
-                    self.player.update_position(0, 1)
+                    self.move_unit(self.player, [0, 1])
 
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
@@ -65,7 +65,19 @@ class Game:
                 tile_x += 1
             tile_y += 1
 
+    def move_unit(self, unit, position_change):
+        new_position = [unit.position[0] + position_change[0], unit.position[1] + position_change[1]]
+
+        if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 2):
+            return
+
+        if new_position[1] < 0 or new_position[1] > (len(self.map[0]) - 2):
+            return
+
+        unit.update_position(new_position)
+
 
 images_for_map = {
-    "G": pygame.transform.scale(pygame.image.load("images\_tile1.png"), (SCALE, SCALE))
+    "G": pygame.transform.scale(pygame.image.load("images\_tile1.png"), (SCALE, SCALE)),
+    "R": pygame.transform.scale(pygame.image.load("images\_tile3.png"), (SCALE, SCALE))
 }
