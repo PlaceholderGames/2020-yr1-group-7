@@ -16,8 +16,9 @@ class Player:
     def update_position(self, new_position):
         self.position[0] = new_position[0]
         self.position[1] = new_position[1]
-        self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
 
-    def render(self, screen):       #Drwaing the player to the screen, of course this is just temporeraly
+
+    def render(self, screen, camera):           #Drwaing the player to the screen, of course this is just temporeraly
+        self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] - (camera[1] * SCALE) * SCALE, SCALE, SCALE)
         screen.blit(self.image, self.rect)
 

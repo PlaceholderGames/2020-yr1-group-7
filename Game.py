@@ -1,5 +1,6 @@
 from Player import Player
 import pygame
+import math
 from Game_States import GameStates
 
 SCALE = 64
@@ -10,6 +11,7 @@ class Game:
         self.objects = []
         self.Game_States = GameStates.NONE
         self.map = []
+        self.camera = [0, 0]
 
     def set_up(self):
         player = Player(1, 1)
@@ -26,7 +28,7 @@ class Game:
         self.render_the_map(self.screen)
 
         for object in self.objects:
-            object.render(self.screen)
+            object.render(self.screen, self.camera)
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -55,12 +57,14 @@ class Game:
                 self.map.append(tile)
 
     def render_the_map(self, screen):
+
+        self.position_camera()
         tile_y = 0
         for line in self.map:
             tile_x = 0
             for tile in line:
                 image = images_for_map[tile]
-                rect = pygame.Rect(tile_x * SCALE, tile_y * SCALE, SCALE, SCALE)
+                rect = pygame.Rect(tile_x * SCALE, tile_y * SCALE - (self.camera[1] * SCALE), SCALE, SCALE)
                 screen.blit(image, rect)
                 tile_x += 1
             tile_y += 1
@@ -71,10 +75,22 @@ class Game:
         if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 2):
             return
 
-        if new_position[1] < 0 or new_position[1] > (len(self.map[0]) - 2):
+        if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 2):
             return
 
         unit.update_position(new_position)
+
+    def position_camera(self):
+        max_y_position = len(self.map) - 832 / SCALE
+        y_position = self.player.position[1] - math.ceil(round(832 / SCALE / 2))
+
+        if y_position < max_y_position and y_position >= 0:
+            self.camera[1] = y_position
+        elif y_position < 0:
+            self.camera[1] = 0
+        else:
+            self.camera[1] = max_y_position
+
 
 
 images_for_map = {
