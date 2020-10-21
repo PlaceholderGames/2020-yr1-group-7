@@ -14,11 +14,11 @@ class Game:
         self.camera = [0, 0]
 
     def set_up(self):
-        player = Player(1, 1)
+        player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
         self.player = player
         self.objects.append(player)
         self.Game_States = GameStates.RUNNING
-        self.load_map("map1")
+        self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         print("do the setup")
 
     def update(self):
@@ -45,7 +45,7 @@ class Game:
                 elif event.key == pygame.K_UP:
                     self.move_unit(self.player, [0, -1])
                 elif event.key == pygame.K_DOWN:
-                    self.move_unit(self.player, [0, 1])
+                    self.move_unit(self.player, [0,1])
 
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
@@ -64,7 +64,7 @@ class Game:
             tile_x = 0
             for tile in line:
                 image = images_for_map[tile]
-                rect = pygame.Rect(tile_x * SCALE, tile_y * SCALE - (self.camera[1] * SCALE), SCALE, SCALE)
+                rect = pygame.Rect((tile_x - self.camera[0]) * SCALE, (tile_y - self.camera[1]) * SCALE, SCALE, SCALE)
                 screen.blit(image, rect)
                 tile_x += 1
             tile_y += 1
@@ -72,15 +72,30 @@ class Game:
     def move_unit(self, unit, position_change):
         new_position = [unit.position[0] + position_change[0], unit.position[1] + position_change[1]]
 
-        if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 2):
+        if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 1): # changed from -2
             return
 
-        if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 2):
+        if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 1): # changed from -2
             return
 
         unit.update_position(new_position)
+        return
 
     def position_camera(self):
+        # Added X Axis Camera Stuff -- DoctorMike
+        max_x_position = len(self.map) - 832 / SCALE
+        x_position = self.player.position[0] - math.ceil(round(832 / SCALE / 2))
+
+        if x_position < max_x_position and x_position >= 0:
+            self.camera[0] = x_position
+        elif x_position < 0:
+            self.camera[0] = 0
+        else:
+            self.camera[0] = max_x_position
+
+
+        # End of additions -- DoctorMike
+        
         max_y_position = len(self.map) - 832 / SCALE
         y_position = self.player.position[1] - math.ceil(round(832 / SCALE / 2))
 
