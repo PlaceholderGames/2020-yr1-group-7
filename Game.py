@@ -83,7 +83,7 @@ class Game:
 
     def position_camera(self):
         # Added X Axis Camera Stuff -- DoctorMike
-        max_x_position = len(self.map) - 832 / SCALE
+        max_x_position = len(self.map[0]) - 832 / SCALE
         x_position = self.player.position[0] - math.ceil(round(832 / SCALE / 2))
 
         if x_position < max_x_position and x_position >= 0:
@@ -96,7 +96,7 @@ class Game:
 
         # End of additions -- DoctorMike
         
-        max_y_position = len(self.map) - 832 / SCALE
+        max_y_position = len(self.map[1]) - 832 / SCALE
         y_position = self.player.position[1] - math.ceil(round(832 / SCALE / 2))
 
         if y_position < max_y_position and y_position >= 0:
