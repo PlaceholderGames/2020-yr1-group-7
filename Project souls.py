@@ -5,7 +5,7 @@ from pygame import mixer
 
 pygame.init()       #initiatin pygame
 
-mixer.music.load('Music/backgroundDraftMusic.wav')
+mixer.music.load('Music/backgroundMusicFixed.wav')
 mixer.music.play(-1)
 
 GameWindow = pygame.display.set_mode((832, 832))        #Creating the game window
