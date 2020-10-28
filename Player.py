@@ -1,5 +1,23 @@
 import pygame
+from enum import Enum, unique
 SCALE = 64
+
+@unique
+class States(Enum):
+    IDLE = 0
+    MOVING = 1
+    COMBAT = 3
+    INTERACTING = 4
+    DEAD = 5
+
+    def __init__(self):
+        self._state = States.IDLE
+
+    def set_state(self, state):
+        self._state = state
+
+    def get_state(self):
+        return self._state
 
 class Player:
     def __init__(self, xpos, ypos): #Initializin Player
@@ -28,4 +46,3 @@ class Player:
         # These changes occurred in Game.py too
 
         screen.blit(self.image, self.rect)
-
