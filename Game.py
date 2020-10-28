@@ -2,10 +2,15 @@ from Player import Player
 import pygame
 import math
 from Game_States import GameStates
+from pygame import mixer
 
 SCALE = 64
 
 class Game:
+
+
+
+
     def __init__(self, screen):
         self.screen = screen
         self.objects = []
@@ -21,6 +26,7 @@ class Game:
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         print("do the setup")
 
+
     def update(self):
         self.screen.fill((0, 0, 0))
         print("updating")
@@ -31,6 +37,8 @@ class Game:
             object.render(self.screen, self.camera)
 
     def handle_events(self):
+        walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
+        walksoundtwo = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project two.wav')
         for event in pygame.event.get():
             if event.type == pygame.QUIT:           #this will end the while loop
                 self.Game_States = GameStates.GAMEOVER
@@ -40,12 +48,16 @@ class Game:
                     self.Game_States = GameStates.GAMEOVER
                 elif event.key == pygame.K_LEFT:
                     self.move_unit(self.player, [-1, 0])
+                    walksoundone.play()
                 elif event.key == pygame.K_RIGHT:
                     self.move_unit(self.player, [1, 0])
+                    walksoundtwo.play()
                 elif event.key == pygame.K_UP:
                     self.move_unit(self.player, [0, -1])
+                    walksoundone.play()
                 elif event.key == pygame.K_DOWN:
                     self.move_unit(self.player, [0,1])
+                    walksoundtwo.play()
 
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:

@@ -10,7 +10,7 @@ mixer.music.play(-1)
 
 GameWindow = pygame.display.set_mode((832, 832))        #Creating the game window
 
-pygame.display.set_caption("Poject Souls")      #adding the project name
+pygame.display.set_caption("Project Souls")      #adding the project name
 
 clock = pygame.time.Clock()         #creating the framerate
 
