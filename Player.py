@@ -1,26 +1,23 @@
 import pygame
-from enum import Enum, unique
+
 SCALE = 64
 
-#@unique
-#class States(Enum):
-#    IDLE = 0
-#    MOVING = 1
-#    COMBAT = 3
-#    INTERACTING = 4
-#    DEAD = 5
-#
-#    def __init__(self):
-#        self._state = States.IDLE
-#
-#    def set_state(self, state):
-#        self._state = state
-#
-#    def get_state(self):
-#        return self._state
+class PlayerStats:
+    def __init__(self):
+        self.health = 20
 
-class Player:
+    def attack(self):
+        self.health = -10
+
+    def get_Health(self):
+        return self.health
+
+    def set_health(self, health):
+        self.health = health
+
+class Player(PlayerStats):
     def __init__(self, xpos, ypos): #Initializin Player
+        super().__init__()
         self.position = [xpos, ypos]
         self.image = pygame.image.load("images\player.png")
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
