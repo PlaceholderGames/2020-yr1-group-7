@@ -1,18 +1,25 @@
 import pygame
-#from enum import Enum, unique
+from enum import Enum, unique
 SCALE = 64
 
+class Player_State(Enum):
+    DEFAULT = 0 # *** Only used before set up
+    MOVE = 1    # *** The default mode to move
+    ATTACK = 2  # *** Could be used in Turn-Based Combat
+    DEFEND = 3  # *** Could be used in Turn-Based Combat
+    DEAD = 4    # *** Obvious really
+    
 class Player:
     def __init__(self, xpos, ypos): #Initializin Player
         self.position = [xpos, ypos]
         self.image = pygame.image.load("images\player.png")
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
-
-        print("Player")
+        self.state = Player_State.DEFAULT
+        # print("Player")
 
     def update(self):       #This is where the player will be updated
-        print("Update")
+        print("Update")     #It would need to be called from Game.py for each update, but could automate the state
 
     def update_position(self, new_position):
         self.position[0] = new_position[0]

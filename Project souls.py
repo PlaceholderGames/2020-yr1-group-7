@@ -1,6 +1,6 @@
 import pygame
-from Game import Game
-from Game_States import GameStates
+from Game import Game, Game_State
+# *** from Game_States import GameStates - I have merged this into Game.py
 from pygame import mixer
 
 pygame.init()       #initiatin pygame
@@ -23,10 +23,14 @@ game = Game(GameWindow)
 game.set_up()   #Setting up the objects
 
 
-while game.Game_States == GameStates.RUNNING:    #Keeps the game running while the state is in RUNNING
+while game.Game_States == Game_State.RUNNING:    #Keeps the game running while the state is in RUNNING
     clock.tick(60)      #setting the fps to 60
     game.update()       #Updating the game
     pygame.display.flip() #Update the full display Surface to the screen
+
+
+pygame.quit() # *** Added to end the game
+
 
 
 
