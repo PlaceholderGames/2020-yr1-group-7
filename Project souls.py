@@ -38,8 +38,6 @@ while game.Game_States == Game_State.RUNNING and menu.Game_States_Menu == Game_S
 pygame.quit()  # *** Added to end the game
 
 
-pygame.quit() # *** Added to end the game
-
 
 
 
