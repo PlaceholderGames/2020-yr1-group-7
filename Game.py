@@ -22,11 +22,17 @@ class Game:
         self.camera = [0, 0]
 
     def set_up(self):
-        player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
+        player = Player(1, 0, "Player") # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
         self.player = player
         self.player.state = Player_State.MOVE
-        print(self.player.state)
+        # *** print(self.player.state)
         self.objects.append(player)
+        
+        # *** NPC code here
+        npc = Player(5,5, "NPC")
+        npc.state = Player_State.MOVE
+        self.objects.append(npc)
+        
         self.Game_States = Game_State.RUNNING
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         # *** print("do the setup")

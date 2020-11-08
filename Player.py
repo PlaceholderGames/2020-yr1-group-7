@@ -10,9 +10,13 @@ class Player_State(Enum):
     DEAD = 4    # *** Obvious really
     
 class Player:
-    def __init__(self, xpos, ypos): #Initializin Player
+    def __init__(self, xpos, ypos, type): #Initializin Player # *** Added player type
         self.position = [xpos, ypos]
-        self.image = pygame.image.load("images\player.png")
+        if type =="Player":
+            self.image = pygame.image.load("images\player.png")
+        else:
+            self.image = pygame.image.load('images\\' + 'npc.png') # *** \n has a specific meaning in strings, hence this "fix"
+            
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Player_State.DEFAULT
