@@ -1,35 +1,40 @@
-from Player import Player
+from Player import Player, Player_State # *** incorporated FSM into Player.py
 import pygame
 import math
-from Game_States import GameStates
+# *** from Game_States import GameStates - I have merged this into Game.py
 from pygame import mixer
+from enum import Enum
 
 SCALE = 64
 
+class Game_State(Enum):
+    NONE = 0
+    RUNNING = 1
+    GAMEOVER = 2
+
 class Game:
-
-
-
 
     def __init__(self, screen):
         self.screen = screen
         self.objects = []
-        self.Game_States = GameStates.NONE
+        self.Game_States =  Game_State.NONE #GameStates.NONE
         self.map = []
         self.camera = [0, 0]
 
     def set_up(self):
         player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
         self.player = player
+        self.player.state = Player_State.MOVE
+        print(self.player.state)
         self.objects.append(player)
-        self.Game_States = GameStates.RUNNING
+        self.Game_States = Game_State.RUNNING
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
-        print("do the setup")
+        # *** print("do the setup")
 
 
     def update(self):
         self.screen.fill((0, 0, 0))
-        print("updating")
+        # print("updating")
         self.handle_events()
         self.render_the_map(self.screen)
 
@@ -41,24 +46,42 @@ class Game:
         walksoundtwo = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project two.wav')
         for event in pygame.event.get():
             if event.type == pygame.QUIT:           #this will end the while loop
-                self.Game_States = GameStates.GAMEOVER
+                self.Game_States = Game_State.GAMEOVER
 
             elif event.type == pygame.KEYDOWN:          #Key events
                 if event.key == pygame.K_ESCAPE:
-                    self.Game_States = GameStates.GAMEOVER
-                elif event.key == pygame.K_LEFT:
-                    self.move_unit(self.player, [-1, 0])
-                    walksoundone.play()
-                elif event.key == pygame.K_RIGHT:
-                    self.move_unit(self.player, [1, 0])
-                    walksoundtwo.play()
-                elif event.key == pygame.K_UP:
-                    self.move_unit(self.player, [0, -1])
-                    walksoundone.play()
-                elif event.key == pygame.K_DOWN:
-                    self.move_unit(self.player, [0,1])
-                    walksoundtwo.play()
-
+                    # print('ESCAPE') ~ *** Used to check that Escape was detected
+                    self.Game_States = Game_State.GAMEOVER
+                elif self.player.state == Player_State.MOVE: # *** We don't want to be able to move if we are in Turn-Based Combat
+                    if event.key == pygame.K_LEFT:
+                        self.move_unit(self.player, [-1, 0])
+                        walksoundone.play()
+                    elif event.key == pygame.K_RIGHT:
+                        self.move_unit(self.player, [1, 0])
+                        walksoundtwo.play()
+                    elif event.key == pygame.K_UP:
+                        self.move_unit(self.player, [0, -1])
+                        walksoundone.play()
+                    elif event.key == pygame.K_DOWN:
+                        self.move_unit(self.player, [0,1])
+                        walksoundtwo.play()
+                    elif event.key ==pygame.K_a: # *** This allows us to enter attack mode. Running into an NPC/Monster could automate this
+                        print('Attack!!! Cannot move now')
+                        self.player.state = Player_State.ATTACK
+                    elif event.key ==pygame.K_d:
+                    # *** This allows us to enter defend mode. Being run into by an NPC/Monster could automate this
+                        print('Defend!!! Cannot move now')
+                        self.player.state = Player_State.DEFEND      
+                elif event.key ==pygame.K_a:                # *** This would allow us to be in a mode to choose an attack
+                    print('Attack!!!')
+                    self.player.state = Player_State.ATTACK
+                elif event.key ==pygame.K_d:                # *** This would allow us to be in a mode to choose a defence
+                    print('Defend!!!')
+                    self.player.state = Player_State.DEFEND
+                elif event.key == pygame.K_m:               # *** This allows us to move, or run away from an NPC
+                    self.player.state = Player_State.MOVE
+                    print('Able to move again!!!')
+                    
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
             for line in map_file:
@@ -84,10 +107,10 @@ class Game:
     def move_unit(self, unit, position_change):
         new_position = [unit.position[0] + position_change[0], unit.position[1] + position_change[1]]
 
-        if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 1): # changed from -2
+        if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 1): # *** changed from -2
             return
 
-        if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 1): # changed from -2
+        if new_position[1] < 0 or new_position[1] > (len(self.map) - 1): # *** BUG Fix, as we were not checking the number of rows properly
             return
 
         unit.update_position(new_position)
