@@ -147,3 +147,75 @@ images_for_map = {
     "G": pygame.transform.scale(pygame.image.load("images\_tile1.png"), (SCALE, SCALE)),
     "R": pygame.transform.scale(pygame.image.load("images\_tile3.png"), (SCALE, SCALE))
 }
+
+class Menu:
+
+    def __init__(self, screen):
+        self.screen = screen
+        self.Game_States_Menu = Game_State.NONE # Used to tell if the game is running, or if it has ended
+        self.isMenu = True # If this is True then the game is currently on the main menu, otherwise the game has started
+        self.menuPage = "main" # The two possible conditions are "main" and "credits"
+        # The X and Y co-ords of the mouse
+        self.xPos = 0
+        self.yPos = 0
+        self.mousePos = [self.xPos, self.yPos] # used to store and access the mouses position when left click is pressed
+        # The buttons that will appear on the main menu
+        self.start_button_image = pygame.image.load("images/menu_button_start.png").convert_alpha()
+        self.quit_button_image = pygame.image.load("images/menu_button_quit.png").convert_alpha()
+        self.credits_button_image = pygame.image.load("images/menu_button_credits.png").convert_alpha()
+        self.back_button_image = pygame.image.load("images/menu_button_back.png").convert_alpha()
+        # The background image that will be displayed whilst the main menu is open
+        self.main_menu_background = pygame.image.load("images/main_menu_background.png")
+        self.main_menu_credits = pygame.image.load("images/main_menu_credits.png")
+
+    def set_up_menu(self):
+        self.Game_States_Menu = Game_State.RUNNING
+
+    def mouse_click(self, xPos, yPos):
+        if self.menuPage == "main": # if the menu page is main then the following button co-ords are used
+            if xPos > 32 and xPos < 160:
+                if yPos > 160 and yPos < 224:
+                    self.isMenu = False
+                    print("Start Button Clicked")
+                elif yPos > 288 and yPos < 352:
+                    self.menuPage = "credits"
+                    print("Credits")
+                elif yPos > 416 and yPos < 480:
+                    self.Game_States_Menu = Game_State.GAMEOVER
+                    print("Game Quit")
+        elif self.menuPage == "credits": # if the menu page is credits then the following button co-ords are used
+            if xPos > 32 and xPos < 160:
+                if yPos > 160 and yPos < 224:
+                    self.menuPage = "main"
+                    print("Back Button Clicked")
+
+    def draw_menu(self, screen):
+
+        if self.menuPage == "main":
+            screen.blit(self.main_menu_background, (0, 0))  # Draws the quit button
+
+            screen.blit(self.start_button_image, (32, 160))# Draws the start button
+
+            screen.blit(self.credits_button_image, (32, 288))# Draws the credits button
+
+            screen.blit(self.quit_button_image, (32, 416))# Draws the quit button
+
+        elif self.menuPage == "credits":
+            screen.blit(self.main_menu_credits, (0, 0)) # Draw the credits image to the screen
+
+            screen.blit(self.back_button_image, (32, 160)) # Draws the back button on the credits screen
+
+    def update(self):
+        self.screen.fill((0, 0, 0))
+        self.draw_menu(self.screen)
+        self.handle_events()
+
+    def handle_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:           #this will end the while loop
+                self.Game_States_Menu = Game_State.GAMEOVER
+                self.isMenu = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:          #Key events
+                self.mousePos = pygame.mouse.get_pos()
+                self.mouse_click(self.mousePos[0], self.mousePos[1])
