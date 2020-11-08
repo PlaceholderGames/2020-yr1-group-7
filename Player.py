@@ -10,20 +10,24 @@ class Player_State(Enum):
     DEAD = 4    # *** Obvious really
     
 class Player:
-    def __init__(self, xpos, ypos, type): #Initializin Player # *** Added player type
+    def __init__(self, xpos, ypos, type):   #Initializin Player
+        # *** Added player type
         self.position = [xpos, ypos]
+        self.type = type
+        # *** You will probably need to add Health, and other things too
         if type =="Player":
             self.image = pygame.image.load("images\player.png")
         else:
-            self.image = pygame.image.load('images\\' + 'npc.png') # *** \n has a specific meaning in strings, hence this "fix"
+            self.image = pygame.image.load('images\\' + 'npc.png')
+            # *** \n has a specific meaning in strings, hence this "fix" as we cannot have "images\npc.png"
             
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Player_State.DEFAULT
         # print("Player")
 
-    def update(self):       #This is where the player will be updated
-        print("Update")     #It would need to be called from Game.py for each update, but could automate the state
+    def update(self):       #This is where the player will be updated, especially useful for NPCs
+        print("Updated")     #It would need to be called from Game.py for each update, but could automate the state
 
     def update_position(self, new_position):
         self.position[0] = new_position[0]
@@ -40,3 +44,5 @@ class Player:
         # These changes occurred in Game.py too
 
         screen.blit(self.image, self.rect)
+
+# class NPC(Player):

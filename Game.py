@@ -46,7 +46,11 @@ class Game:
 
         for object in self.objects:
             object.render(self.screen, self.camera)
-
+            if isinstance(object,Player):
+                if object.type == "NPC":        # *** Here we can add other elif clauses to handle different NPCs in different ways
+                    print('Found an NPC!!!')    # *** here we would do something with the NPCs
+                    object.update()
+                    
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
         walksoundtwo = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project two.wav')
