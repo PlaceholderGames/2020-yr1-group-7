@@ -1,4 +1,5 @@
 from Player import Player, Player_State # *** incorporated FSM into Player.py
+from Enemy import Enemy, Enemy_State
 import pygame
 import math
 # *** from Game_States import GameStates - I have merged this into Game.py
@@ -17,16 +18,21 @@ class Game:
     def __init__(self, screen):
         self.screen = screen
         self.objects = []
+        self.enemies = []
         self.Game_States =  Game_State.NONE #GameStates.NONE
         self.map = []
         self.camera = [0, 0]
 
     def set_up(self):
         player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
+        enemy = Enemy(1, 1)
         self.player = player
+        self.enemy = enemy
         self.player.state = Player_State.MOVE
+        self.enemy.state = Enemy_State.MOVE
         print(self.player.state)
         self.objects.append(player)
+        self.enemies.append(enemy)
         self.Game_States = Game_State.RUNNING
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         # *** print("do the setup")
@@ -40,6 +46,9 @@ class Game:
 
         for object in self.objects:
             object.render(self.screen, self.camera)
+
+        for object in self.enemies:
+            object.render(self.screen)
 
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
