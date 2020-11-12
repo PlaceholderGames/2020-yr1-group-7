@@ -48,7 +48,7 @@ class Game:
             object.render(self.screen, self.camera)
 
         for object in self.enemies:
-            object.render(self.screen)
+            object.render(self.screen, self.camera)
 
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')

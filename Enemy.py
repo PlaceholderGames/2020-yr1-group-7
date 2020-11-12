@@ -19,7 +19,8 @@ class Enemy:
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Enemy_State.DEFAULT
 
-    def render(self, screen):
-        self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
+    def render(self, screen, camera):
+        self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE,
+                                SCALE)
 
         screen.blit(self.image, self.rect)
