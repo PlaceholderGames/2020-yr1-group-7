@@ -119,7 +119,7 @@ class Game:
         if new_position[0] < 0 or new_position[0] > (len(self.map[0]) - 1): # *** changed from -2
             return
 
-        if new_position[1] < 0 or new_position[1] > (len(self.map) - 1): # *** BUG Fix, as we were not checking the number of rows properly
+        if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 1): # Fixed the BUG where the player was able to walk off the camera
             return
 
         unit.update_position(new_position)
