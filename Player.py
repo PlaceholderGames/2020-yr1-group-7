@@ -25,9 +25,9 @@ class Player:
         self.position[0] = new_position[0]
         self.position[1] = new_position[1]
 
-
-    def render(self, screen, camera):           #Drawing the player to the screen, of course this is just temporeraly
-        self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
+    def render(self, screen, camera):  # Drawing the player to the screen, of course this is just temporeraly
+        self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE,
+                                SCALE)
 
         # Error identified and fixed -- DoctorMike
         # Your error was in the above. You had (self.position[1] - camera[1]*SCALE)*SCALE
