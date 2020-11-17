@@ -1,5 +1,7 @@
 from Player import Player, Player_State # *** incorporated FSM into Player.py
 from Enemy import Enemy, Enemy_State
+from Enemy_2 import Enemy_2, Enemy_2_State
+from Enemy_3 import Enemy_3, Enemy_3_State
 import pygame
 import math
 # *** from Game_States import GameStates - I have merged this into Game.py
@@ -18,7 +20,6 @@ class Game:
     def __init__(self, screen):
         self.screen = screen
         self.objects = []
-        self.enemies = []
         self.Game_States =  Game_State.NONE #GameStates.NONE
         self.map = []
         self.camera = [0, 0]
@@ -26,13 +27,21 @@ class Game:
     def set_up(self):
         player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
         enemy = Enemy(1, 1)
+        enemy2 = Enemy_2(3, 3)
+        enemy3 = Enemy_3(5, 6)
         self.player = player
         self.enemy = enemy
+        self.enemy2 = enemy2
+        self.enemy3 = enemy3
         self.player.state = Player_State.MOVE
         self.enemy.state = Enemy_State.MOVE
+        self.enemy2.state = Enemy_2_State.MOVE
+        self.enemy3.state = Enemy_3_State.MOVE
         print(self.player.state)
         self.objects.append(player)
-        self.enemies.append(enemy)
+        self.objects.append(enemy)
+        self.objects.append(enemy2)
+        self.objects.append(enemy3)
         self.Game_States = Game_State.RUNNING
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         # *** print("do the setup")
@@ -47,8 +56,6 @@ class Game:
         for object in self.objects:
             object.render(self.screen, self.camera)
 
-        for object in self.enemies:
-            object.render(self.screen, self.camera)
 
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
@@ -120,6 +127,15 @@ class Game:
             return
 
         if new_position[1] < 0 or new_position[1] > (len(self.map[1]) - 1): # Fixed the BUG where the player was able to walk off the camera
+            return
+
+        if new_position[0] == self.enemy.position[0] and new_position[1] == self.enemy.position[1]: #Added colusion for the enemy
+            return
+
+        if new_position[0] == self.enemy2.position[0] and new_position[1] == self.enemy2.position[1]:   #Added colusion for the enemy2
+            return
+
+        if new_position[0] == self.enemy3.position[0] and new_position[1] == self.enemy3.position[1]:   #Added colusion for the enemy3
             return
 
         unit.update_position(new_position)
