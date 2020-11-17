@@ -4,11 +4,14 @@ from Enemy_2 import Enemy_2, Enemy_2_State
 from Enemy_3 import Enemy_3, Enemy_3_State
 import pygame
 import math
+import time
 # *** from Game_States import GameStates - I have merged this into Game.py
 from pygame import mixer
 from enum import Enum
 
 SCALE = 64
+
+pygame.mixer.init()  # Required for sounds other than music to be used
 
 class Game_State(Enum):
     NONE = 0
@@ -87,7 +90,7 @@ class Game:
                     elif event.key ==pygame.K_d:
                     # *** This allows us to enter defend mode. Being run into by an NPC/Monster could automate this
                         print('Defend!!! Cannot move now')
-                        self.player.state = Player_State.DEFEND      
+                        self.player.state = Player_State.DEFEND
                 elif event.key ==pygame.K_a:                # *** This would allow us to be in a mode to choose an attack
                     print('Attack!!!')
                     self.player.state = Player_State.ATTACK
@@ -97,14 +100,14 @@ class Game:
                 elif event.key == pygame.K_m:               # *** This allows us to move, or run away from an NPC
                     self.player.state = Player_State.MOVE
                     print('Able to move again!!!')
-                    
+
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
             for line in map_file:
                 tile = []
                 for i in range(0, len(line) - 1, 2):
                     tile.append(line[i])
-                    
+
                 self.map.append(tile)
 
     def render_the_map(self, screen):
@@ -155,7 +158,7 @@ class Game:
 
 
         # End of additions -- DoctorMike
-        
+
         max_y_position = len(self.map[1]) - 832 / SCALE
         y_position = self.player.position[1] - math.ceil(round(832 / SCALE / 2))
 
@@ -181,6 +184,8 @@ class Menu:
         self.Game_States_Menu = Game_State.NONE # Used to tell if the game is running, or if it has ended
         self.isMenu = True # If this is True then the game is currently on the main menu, otherwise the game has started
         self.menuPage = "main" # The two possible conditions are "main" and "credits"
+        self.startGame = False  # If True then the screen will fade to black and the game will start
+        self.playSound = True  # Used so that sounds only play once, when False sounds like Hovering over buttons won't play
 
         # The X and Y co-ords of the mouse
         self.xPos = 0
@@ -204,7 +209,7 @@ class Menu:
         if self.menuPage == "main": # if the menu page is main then the following button co-ords are used
             if xPos > 32 and xPos < 160:
                 if yPos > 160 and yPos < 224:
-                    self.isMenu = False
+                    self.startGame = True
                     print("Start Button Clicked")
                 elif yPos > 288 and yPos < 352:
                     self.menuPage = "credits"
@@ -223,15 +228,39 @@ class Menu:
             if xPos > 32 and xPos < 160:
                 if yPos > 160 and yPos < 224:
                     self.start_button_image = images_for_menu["Start_Hover"]
+                    if self.playSound:
+                        pygame.mixer.Sound.play(sounds_for_menu["Button_Hover"])
+                        self.playSound = False
+
                 elif yPos > 288 and yPos < 352:
                     self.credits_button_image = images_for_menu["Credits_Hover"]
+                    if self.playSound:
+                        pygame.mixer.Sound.play(sounds_for_menu["Button_Hover"])
+                        self.playSound = False
+
                 elif yPos > 416 and yPos < 480:
                     self.quit_button_image = images_for_menu["Quit_Hover"]
+                    if self.playSound:
+                        pygame.mixer.Sound.play(sounds_for_menu["Button_Hover"])
+                        self.playSound = False
+
+                else:
+                    self.playSound = True
+            else:
+                self.playSound = True
 
         elif self.menuPage == "credits":  # if the menu page is credits then the following button co-ords are used
             if xPos > 32 and xPos < 160:
                 if yPos > 160 and yPos < 224:
                     self.back_button_image = images_for_menu["Back_Hover"]
+                    if self.playSound:
+                        pygame.mixer.Sound.play(sounds_for_menu["Button_Hover"])
+                        self.playSound = False
+
+                else:
+                    self.playSound = True
+            else:
+                self.playSound = True
 
     def reset_menu_images(self):  # Sets the menu images back to their defaults, this is to clean up any changes made to them
         self.start_button_image = images_for_menu["Start"]
@@ -262,7 +291,27 @@ class Menu:
 
         self.draw_menu(self.screen)
 
-        self.handle_events()
+        if self.startGame:
+            fadeSpeed = 5  # Controls how quick the screen fades to black
+
+            for i in range(0, 61):
+                self.screen.fill((0, 0, 0))  # Draws the menu still so you can see it fade away
+
+                self.reset_menu_images()
+
+                self.draw_menu(self.screen)
+
+                s = pygame.Surface((832, 832))  # This creates a fade to black when starting the game
+                s.set_alpha(i*fadeSpeed)
+                s.fill((0, 0, 0))
+                self.screen.blit(s, (0, 0))
+
+                time.sleep(0.01)
+
+                pygame.display.flip()
+            self.isMenu = False
+        else:
+            self.handle_events()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -287,4 +336,8 @@ images_for_menu = {
     "Back_Hover": pygame.image.load("images/menu_button_back_hover.png"),
     "Main_Menu_Background": pygame.image.load("images/main_menu_background.png"),
     "Credits_Background": pygame.image.load("images/main_menu_credits.png")
+}
+# The sounds used for the main menu
+sounds_for_menu = {
+    "Button_Hover": pygame.mixer.Sound("Sounds/Menu Sounds/button_hover.wav")
 }
