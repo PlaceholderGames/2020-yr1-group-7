@@ -3,7 +3,7 @@ from enum import Enum, unique
 
 SCALE = 64
 
-class Entity_1():
+class Entity_2():
     def __init__(self):
         self.health = 150
 
