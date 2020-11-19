@@ -3,6 +3,18 @@ from enum import Enum, unique
 
 SCALE = 64
 
+class Entity_3():
+    def __init__(self):
+        self.health = 80
+
+    def attack(self):
+        self.health = -10
+
+    def get_health(self):
+        return self.health
+
+    def set_health(self, health):
+        self.health = health
 
 class Enemy_3_State(Enum):
     DEFAULT = 0  # this is for the setup
