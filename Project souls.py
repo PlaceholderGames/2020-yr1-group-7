@@ -4,9 +4,8 @@ from Game import Game, Game_State, Menu
 from pygame import mixer
 
 pygame.init()       #initiatin pygame
+pygame.mixer.init()
 
-mixer.music.load('Music/backgroundMusicFixed.wav')
-mixer.music.play(-1)
 
 GameWindow = pygame.display.set_mode((832, 832))        #Creating the game window
 
@@ -14,6 +13,8 @@ pygame.display.set_caption("Project Souls")      #adding the project name
 
 clock = pygame.time.Clock()         #creating the framerate
 
+pygame.mixer.music.load('Music/MenuMusic.wav')
+pygame.mixer.music.play(-1)
 
 GameWindow.fill((0, 0, 0))
 

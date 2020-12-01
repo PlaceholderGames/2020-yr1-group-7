@@ -49,7 +49,6 @@ class Game:
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         # *** print("do the setup")
 
-
     def update(self):
         self.screen.fill((0, 0, 0))
         # print("updating")
@@ -63,6 +62,8 @@ class Game:
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
         walksoundtwo = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project two.wav')
+
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:           #this will end the while loop
                 self.Game_States = Game_State.GAMEOVER
@@ -179,6 +180,7 @@ images_for_map = {
 
 class Menu:
 
+
     def __init__(self, screen):
         self.screen = screen
         self.Game_States_Menu = Game_State.NONE # Used to tell if the game is running, or if it has ended
@@ -276,9 +278,11 @@ class Menu:
             screen.blit(self.credits_button_image, (32, 288))  # Draws the credits button
             screen.blit(self.quit_button_image, (32, 416))  # Draws the quit button
 
+
         elif self.menuPage == "credits":
             screen.blit(self.main_menu_credits, (0, 0))  # Draw the credits image to the screen
             screen.blit(self.back_button_image, (32, 160))  # Draws the back button on the credits screen
+
 
     def update(self):
         self.screen.fill((0, 0, 0))
@@ -293,6 +297,10 @@ class Menu:
 
         if self.startGame:
             fadeSpeed = 5  # Controls how quick the screen fades to black
+
+            pygame.mixer.music.stop()
+            pygame.mixer.music.load('Music/backgroundMusicFixed.wav')
+            pygame.mixer.music.play(-1)
 
             for i in range(0, 61):
                 self.screen.fill((0, 0, 0))  # Draws the menu still so you can see it fade away
@@ -323,6 +331,7 @@ class Menu:
                 print("Mouse Clicked")
                 self.mousePos = pygame.mouse.get_pos()
                 self.mouse_click(self.mousePos[0], self.mousePos[1])
+
 
 # The images used for the main menu
 images_for_menu = {
