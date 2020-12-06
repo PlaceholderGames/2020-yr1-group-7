@@ -2,6 +2,23 @@ import pygame
 from enum import Enum, unique
 SCALE = 64
 
+class Entity():
+    def __init__(self):
+        self.health = 100
+
+    def attack(self, target):
+        target.health += -30
+
+    def get_health(self):
+        return self.health
+
+    def __setstate__(self, state):
+        self.state = state
+
+    def set_health(self, health):
+        self.health = health
+
+
 class Player_State(Enum):
     DEFAULT = 0 # *** Only used before set up
     MOVE = 1    # *** The default mode to move
@@ -9,8 +26,9 @@ class Player_State(Enum):
     DEFEND = 3  # *** Could be used in Turn-Based Combat
     DEAD = 4    # *** Obvious really
     
-class Player:
+class Player(Entity):
     def __init__(self, xpos, ypos): #Initializin Player
+        super(Player, self).__init__()
         self.position = [xpos, ypos]
         self.image = pygame.image.load("images\player.png")
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
