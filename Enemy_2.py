@@ -34,10 +34,10 @@ class Enemy_2(Entity_2):
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Enemy_2_State.DEFAULT
+        self.hitbox = (self.position[0] + 20, self.position[1], 28, 60)
 
     def render(self, screen, camera):
         if self.state != Enemy_2_State.DEAD:
-            self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE,
-                                SCALE)
-
+            self.hitbox = (self.position[0] + 20, self.position[1], 28, 60)
+            self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
             screen.blit(self.image, self.rect)

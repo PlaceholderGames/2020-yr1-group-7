@@ -96,7 +96,6 @@ class Game:
                     print('Attack!!!')
                     self.player.state = Player_State.ATTACK
                     self.player.attack(self.enemy)
-                    print(self.enemy.get_health())
                     if self.enemy.health <= 0:
                         self.enemy.state = self.enemy.state.DEAD
                 elif event.key ==pygame.K_d:                # *** This would allow us to be in a mode to choose a defence
@@ -105,7 +104,6 @@ class Game:
                 elif event.key == pygame.K_m:               # *** This allows us to move, or run away from an NPC
                     self.player.state = Player_State.MOVE
                     print('Able to move again!!!')
-
 
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
