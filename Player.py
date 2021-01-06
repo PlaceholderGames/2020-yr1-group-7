@@ -45,6 +45,7 @@ class Player(Entity):
         self.position[1] = new_position[1]
 
     def render(self, screen, camera):  # Drawing the player to the screen, of course this is just temporeraly
+        #self.rect = pygame.Rect((255,0,0), self.hitbox, SCALE, SCALE) #this is the line that causes the crash
         self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
 
         # Error identified and fixed -- DoctorMike
