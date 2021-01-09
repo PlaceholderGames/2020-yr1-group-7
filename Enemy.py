@@ -5,10 +5,10 @@ SCALE = 64
 
 class Entity_1():
     def __init__(self):
-        self.health = 100
+        self.health = 25
 
     def attack(self, player):
-        player.health += -30
+        player.health += -7
 
     def get_health(self):
         return self.health
@@ -38,5 +38,4 @@ class Enemy(Entity_1):
     def render(self, screen, camera):
         if self.state != Enemy_State.DEAD:
             self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
-
             screen.blit(self.image, self.rect)
