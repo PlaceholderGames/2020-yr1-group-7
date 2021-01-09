@@ -9,6 +9,9 @@ class Entity():
     def attack(self, target):
         target.health += -15
 
+    def defence(self):
+        self.health += 5
+
     def get_health(self):
         return self.health
 

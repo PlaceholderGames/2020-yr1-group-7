@@ -5,6 +5,7 @@ from Enemy_3 import Enemy_3, Enemy_3_State
 import pygame
 import math
 import time
+import random
 # *** from Game_States import GameStates - I have merged this into Game.py
 from pygame import mixer
 from enum import Enum
@@ -102,7 +103,8 @@ class Game:
                     self.player.state = Player_State.ATTACK
                     if self.target.state != self.target.state.DEAD:
                         self.player.attack(self.target)
-                        self.target.attack(self.player)
+                        #self.target.attack(self.player)
+                        self.take_action(self.target)
                         print(self.target.health)
                         print(self.player.health)
                         if self.target.health <= 0:
@@ -112,6 +114,15 @@ class Game:
                 elif event.key ==pygame.K_d:                # *** This would allow us to be in a mode to choose a defence
                     print('Defend!!!')
                     self.player.state = Player_State.DEFEND
+                    if self.target.state != self.target.state.DEAD:
+                        self.player.defence()
+                        self.take_action(self.target)
+                        print(self.target.health)
+                        print(self.player.health)
+                        if self.target.health <= 0:
+                            self.player.health = 100
+                            self.target.state = self.target.state.DEAD
+                            self.enemies.remove(self.target)
                 elif event.key == pygame.K_m:               # *** This allows us to move, or run away from an NPC
                     self.player.state = Player_State.MOVE
                     print('Able to move again!!!')
@@ -124,6 +135,17 @@ class Game:
                     tile.append(line[i])
 
                 self.map.append(tile)
+
+    def take_action(self, target):
+        x = random.randint(0, 10)
+        print(x)
+        if x <= 5:
+            target.attack(self.player)
+            print("enemy is attacking")
+        if x > 5:
+            print("enemy is defending")
+            target.defence()
+
 
     def victory(self):
         if self.player.health <= 0:

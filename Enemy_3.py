@@ -9,7 +9,10 @@ class Entity_3():
 
     def attack(self, player):
         player.health += -1000
-        print("I mean it's a souls game...what did you expect?!")
+        print("I mean it's a souls game...what did you expect?! ")
+
+    def defence(self):
+        self.health += 5
 
     def get_health(self):
         return self.health
