@@ -7,7 +7,7 @@ class Entity():
         self.health = 100
 
     def attack(self, target):
-        target.health += -30
+        target.health += -15
 
     def get_health(self):
         return self.health
@@ -34,7 +34,6 @@ class Player(Entity):
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Player_State.DEFAULT
-        self.hitbox =(self.position[0] + 20, self.position[1], 28, 60)
         # print("Player")
 
     def update(self):       #This is where the player will be updated
@@ -45,13 +44,12 @@ class Player(Entity):
         self.position[1] = new_position[1]
 
     def render(self, screen, camera):  # Drawing the player to the screen, of course this is just temporeraly
-        #self.rect = pygame.Rect((255,0,0), self.hitbox, SCALE, SCALE) #this is the line that causes the crash
-        self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
+        if self.state != Player_State.DEAD:
+            self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
 
         # Error identified and fixed -- DoctorMike
         # Your error was in the above. You had (self.position[1] - camera[1]*SCALE)*SCALE
         # What you needed was (self.position[1] - camera[1])* SCALE
         # I also added a camera[0] for the x axis, in case you ever wanted side scrolling
         # These changes occurred in Game.py too
-        self.hitbox = (self.position[0] + 20, self.position[1], 28, 60)
-        screen.blit(self.image, self.rect)
+            screen.blit(self.image, self.rect)

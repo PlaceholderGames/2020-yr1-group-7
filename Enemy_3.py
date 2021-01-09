@@ -8,7 +8,8 @@ class Entity_3():
         self.health = 80
 
     def attack(self, player):
-        player.health += -10
+        player.health += -1000
+        print("I mean it's a souls game...what did you expect?!")
 
     def get_health(self):
         return self.health
@@ -34,11 +35,9 @@ class Enemy_3(Entity_3):
         self.image = pygame.transform.scale(self.image, (SCALE, SCALE))
         self.rect = pygame.Rect(self.position[0] * SCALE, self.position[1] * SCALE, SCALE, SCALE)
         self.state = Enemy_3_State.DEFAULT
-        self.hitbox = (self.position[0] + 20, self.position[1], 28, 60)
 
     def render(self, screen, camera):
         if self.state != Enemy_3_State.DEAD:
-            self.hitbox = (self.position[0] + 20, self.position[1], 28, 60)
             self.rect = pygame.Rect((self.position[0] - camera[0]) * SCALE, (self.position[1] - camera[1]) * SCALE, SCALE, SCALE)
 
             screen.blit(self.image, self.rect)

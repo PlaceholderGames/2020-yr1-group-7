@@ -25,6 +25,7 @@ class Game:
         self.objects = []
         self.Game_States = Game_State.NONE #GameStates.NONE
         self.map = []
+        self.enemies = []
         self.camera = [0, 0]
 
     def set_up(self):
@@ -36,6 +37,7 @@ class Game:
         self.enemy = enemy
         self.enemy2 = enemy2
         self.enemy3 = enemy3
+        self.target = enemy
         self.player.state = Player_State.MOVE
         self.enemy.state = Enemy_State.MOVE
         self.enemy2.state = Enemy_2_State.MOVE
@@ -45,6 +47,9 @@ class Game:
         self.objects.append(enemy)
         self.objects.append(enemy2)
         self.objects.append(enemy3)
+        self.enemies.append(enemy)
+        self.enemies.append(enemy2)
+        self.enemies.append(enemy3)
         self.Game_States = Game_State.RUNNING
         self.load_map("map2") # Changed the map to test X Axis scrolling -- DoctorMike
         # *** print("do the setup")
@@ -57,7 +62,7 @@ class Game:
 
         for object in self.objects:
             object.render(self.screen, self.camera)
-
+        self.victory()
 
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
@@ -95,9 +100,15 @@ class Game:
                 elif event.key ==pygame.K_a:                # *** This would allow us to be in a mode to choose an attack
                     print('Attack!!!')
                     self.player.state = Player_State.ATTACK
-                    self.player.attack(self.enemy)
-                    if self.enemy.health <= 0:
-                        self.enemy.state = self.enemy.state.DEAD
+                    if self.target.state != self.target.state.DEAD:
+                        self.player.attack(self.target)
+                        self.target.attack(self.player)
+                        print(self.target.health)
+                        print(self.player.health)
+                        if self.target.health <= 0:
+                            self.player.health = 100
+                            self.target.state = self.target.state.DEAD
+                            self.enemies.remove(self.target)
                 elif event.key ==pygame.K_d:                # *** This would allow us to be in a mode to choose a defence
                     print('Defend!!!')
                     self.player.state = Player_State.DEFEND
@@ -113,6 +124,17 @@ class Game:
                     tile.append(line[i])
 
                 self.map.append(tile)
+
+    def victory(self):
+        if self.player.health <= 0:
+            self.player.state = self.player.state.DEAD
+            print("YOU HAVE LOST")
+            self.Game_States = Game_State.GAMEOVER
+
+        #this is the win condition which is here just for show XD
+        if len(self.enemies) == 0:
+            print("YOU HAVE WON")
+            self.Game_States = Game_State.GAMEOVER
 
     def render_the_map(self, screen):
 
@@ -137,12 +159,18 @@ class Game:
             return
 
         if new_position[0] == self.enemy.position[0] and new_position[1] == self.enemy.position[1]: #Added colusion for the enemy
+            self.target = self.enemy
+            print("enemy")
             return
 
         if new_position[0] == self.enemy2.position[0] and new_position[1] == self.enemy2.position[1]:   #Added colusion for the enemy2
+            self.target = self.enemy2
+            print("enemy2")
             return
 
         if new_position[0] == self.enemy3.position[0] and new_position[1] == self.enemy3.position[1]:   #Added colusion for the enemy3
+            self.target = self.enemy3
+            print("enemy3")
             return
 
         unit.update_position(new_position)
