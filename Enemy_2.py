@@ -1,4 +1,5 @@
 import pygame
+import random
 from enum import Enum, unique
 
 SCALE = 64
@@ -9,6 +10,13 @@ class Entity_2():
 
     def attack(self, player):
         player.health += -10
+
+    def counter(self):
+        return random.randint(0, 100)
+
+    def critical_attack(self, target):
+        target.health += -50
+        print("GRRRRRRRR!!!!!!")
 
     def defence(self):
         self.health += 5

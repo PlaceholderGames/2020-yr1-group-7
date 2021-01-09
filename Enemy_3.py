@@ -1,4 +1,5 @@
 import pygame
+import random
 from enum import Enum, unique
 
 SCALE = 64
@@ -10,6 +11,13 @@ class Entity_3():
     def attack(self, player):
         player.health += -1000
         print("I mean it's a souls game...what did you expect?! ")
+
+    def critical_attack(self, target):
+        target.health += -2000
+        print("I mean..just death...")
+
+    def counter(self):
+        return random.randint(10, 100)
 
     def defence(self):
         self.health += 5

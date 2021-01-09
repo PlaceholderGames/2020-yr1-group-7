@@ -127,6 +127,18 @@ class Game:
                     self.player.state = Player_State.MOVE
                     print('Able to move again!!!')
 
+                elif event.key == pygame.K_c:               # *** This will be the counter attack for the player
+                    self.player.state = Player_State.ATTACK
+                    print('Attemp to counter the attack')
+                    if self.player.counter() > self.target.counter():
+                        self.player.critical_attack(self.target)
+                        if self.target.health <= 0:
+                            self.player.health = 100
+                            self.target.state = self.target.state.DEAD
+                            self.enemies.remove(self.target)
+                    elif self.player.counter() < self.target.counter():
+                        self.target.critical_attack(self.player)
+
     def load_map(self, file_name):
         with open("maps/" + file_name + ".txt") as map_file:
             for line in map_file:
