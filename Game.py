@@ -33,7 +33,7 @@ class Game:
         player = Player(1, 0) # More aesthetically pleasing to have him start on the path :-) -- DoctorMike
         enemy = Enemy(1, 1)
         enemy2 = Enemy_2(3, 3)
-        enemy3 = Enemy_3(5, 6)
+        enemy3 = Enemy_3(27, 19)
         self.player = player
         self.enemy = enemy
         self.enemy2 = enemy2
@@ -68,6 +68,8 @@ class Game:
     def handle_events(self):
         walksoundone = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project one.wav')
         walksoundtwo = pygame.mixer.Sound('Sounds/Walking sounds/Walk for project two.wav')
+        Slash = pygame.mixer.Sound('Sounds/attacks/Slash.wav')
+        Counter = pygame.mixer.Sound('Sounds/attacks/Parry_Sound.wav')
 
 
         for event in pygame.event.get():
@@ -105,6 +107,7 @@ class Game:
                         self.player.attack(self.target)
                         #self.target.attack(self.player)
                         self.take_action(self.target)
+                        Slash.play()
                         print(self.target.health)
                         print(self.player.health)
                         if self.target.health <= 0:
@@ -129,9 +132,10 @@ class Game:
 
                 elif event.key == pygame.K_c:               # *** This will be the counter attack for the player
                     self.player.state = Player_State.ATTACK
-                    print('Attemp to counter the attack')
+                    print('Attempt to counter the attack')
                     if self.player.counter() > self.target.counter():
                         self.player.critical_attack(self.target)
+                        Counter.play()
                         if self.target.health <= 0:
                             self.player.health = 100
                             self.target.state = self.target.state.DEAD
